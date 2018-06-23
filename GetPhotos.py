@@ -46,21 +46,23 @@ USERS = ['@mlstylephoto']
 
 # In[ ]:
 
-
-tweet_id  = 4
-for line in api.GetStreamFilter(track=USERS):
-    tweet = line
-    media = tweet.get('extended_entities', {}).get('media', [])
-    user = tweet.get('user', {}).get('screen_name', [])
-    time = str(tweet.get('created_at'))
-    if (len(media) == 0):
-        pass
-    else:
-        tweet_id = tweet_id + 1
-        pic = [item['media_url'] for item in media]
-        url_1 = str(pic[0].encode("utf-8"))
-        url_2 = str(pic[1].encode("utf-8"))
-        with conn.cursor() as cur:
-            cur.execute('insert into NewTweets (Time, Picture, StylePic, Username, id) values("'+time+'","'+url_1+'","'+url_2+'","'+str(user)+'","'+str(tweet_id)+'")')
-            conn.commit()
-
+while True:
+	try:
+		tweet_id  = 115
+		for line in api.GetStreamFilter(track=USERS):
+    			tweet = line
+    			media = tweet.get('extended_entities', {}).get('media', [])
+   		 	user = tweet.get('user', {}).get('screen_name', [])
+    			time = str(tweet.get('created_at'))
+    			if (len(media) == 0):
+        			pass
+    			else:
+        			tweet_id = tweet_id + 1
+        			pic = [item['media_url'] for item in media]
+        			url_1 = str(pic[0].encode("utf-8"))
+        			url_2 = str(pic[1].encode("utf-8"))
+        			with conn.cursor() as cur:
+            				cur.execute('insert into NewTweets (Time, Picture, StylePic, Username, id) values("'+time+'","'+url_1+'","'+url_2+'","'+str(user)+'","'+str(tweet_id)+'")')
+            				conn.commit()
+	except:
+		pass
