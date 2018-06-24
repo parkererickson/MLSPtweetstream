@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[ ]:
+# In[1]:
 
 
 from twitter import Api
@@ -11,7 +11,7 @@ import json
 import pymysql
 
 
-# In[ ]:
+# In[2]:
 
 
 api = Api(config.consumer_key,
@@ -21,7 +21,7 @@ api = Api(config.consumer_key,
     
 
 
-# In[ ]:
+# In[3]:
 
 
 rds_host  = config.db_endpoint
@@ -31,14 +31,14 @@ db_name = config.db_name
 port = 3306
 
 
-# In[ ]:
+# In[4]:
 
 
 conn = pymysql.connect(rds_host, user=name,
                            passwd=password, db=db_name, connect_timeout=5)
 
 
-# In[ ]:
+# In[5]:
 
 
 USERS = ['@mlstylephoto']
@@ -46,23 +46,23 @@ USERS = ['@mlstylephoto']
 
 # In[ ]:
 
-while True:
-	try:
-		tweet_id  = 115
-		for line in api.GetStreamFilter(track=USERS):
-    			tweet = line
-    			media = tweet.get('extended_entities', {}).get('media', [])
-   		 	user = tweet.get('user', {}).get('screen_name', [])
-    			time = str(tweet.get('created_at'))
-    			if (len(media) == 0):
-        			pass
-    			else:
-        			tweet_id = tweet_id + 1
-        			pic = [item['media_url'] for item in media]
-        			url_1 = str(pic[0].encode("utf-8"))
-        			url_2 = str(pic[1].encode("utf-8"))
-        			with conn.cursor() as cur:
-            				cur.execute('insert into NewTweets (Time, Picture, StylePic, Username, id) values("'+time+'","'+url_1+'","'+url_2+'","'+str(user)+'","'+str(tweet_id)+'")')
-            				conn.commit()
-	except:
-		pass
+
+
+for line in api.GetStreamFilter(track=USERS):
+    tweet = line
+    media = tweet.get('extended_entities', {}).get('media', [])
+    user = tweet.get('user', {}).get('screen_name', [])
+    time = str(tweet.get('created_at'))
+    tweet_id = tweet.get('id')
+    complete = 0
+    print(tweet_id)
+    if (len(media) == 0):
+        pass
+    else:
+        pic = [item['media_url'] for item in media]
+        url_1 = str(pic[0].encode("utf-8"))
+        url_2 = str(pic[1].encode("utf-8"))
+        with conn.cursor() as cur:
+            cur.execute('insert into Queue (Time, Picture, StylePic, Username, Tweet_ID, Complete) values("'+time+'","'+url_1+'","'+url_2+'","'+str(user)+'","'+str(tweet_id)+'","'+str(complete)+'")')
+            conn.commit()
+
