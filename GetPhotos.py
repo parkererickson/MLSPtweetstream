@@ -9,7 +9,7 @@ import config
 import wget
 import json
 import pymysql
-
+import boto3
 
 # In[2]:
 
@@ -62,7 +62,11 @@ for line in api.GetStreamFilter(track=USERS):
         pic = [item['media_url'] for item in media]
         url_1 = str(pic[0].encode("utf-8"))
         url_2 = str(pic[1].encode("utf-8"))
+	try:
+		ec2 = boto3.client('ec2', region_name = 'us-east-2')
+		ec2.start_instances(InstanceIds=['i-08230cf0b47f62e76'])
+	except:
+		pass
         with conn.cursor() as cur:
             cur.execute('insert into Queue (Time, Picture, StylePic, Username, Tweet_ID, Complete) values("'+time+'","'+url_1+'","'+url_2+'","'+str(user)+'","'+str(tweet_id)+'","'+str(complete)+'")')
             conn.commit()
-
