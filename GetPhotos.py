@@ -64,7 +64,7 @@ for line in api.GetStreamFilter(track=USERS):
         url_2 = str(pic[1].encode("utf-8"))
 	try:
 		ec2 = boto3.client('ec2', region_name = 'us-east-2')
-		ec2.start_instances(InstanceIds=['i-08230cf0b47f62e76'])
+		ec2.start_instances(InstanceIds=['i-############'])
 	except:
 		pass
         with conn.cursor() as cur:
