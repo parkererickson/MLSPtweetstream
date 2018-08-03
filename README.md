@@ -1,3 +1,2 @@
 # MLSPtweetstream
-Twitter Streaming Code for Machine Learning Style Photo Bot
-This code works along with my MLSPstyletransfer repository.  This code runs on an AWS EC2 t2.micro instance.  The code streams tweets with the handle @mlstylephoto and then enters the necessary data into an AWS RDS MySql database.
+The whole process begins when a user tweets their two images to @mlphotostyle. The program uses Twitter’s streaming API to get tweets with @mlphotostyle tagged, and determines if they can be processed by looking at the media files. If they are able to process, the relevent information is extracted and recorded in a database on AWS RDS. The program also triggers an EC2 m5.xlarge instance to spin up to process the two images. For the code, check out this Github repository.
